@@ -9,6 +9,7 @@ public class ResourceManager {
     ClassLoader classLoader;
     BufferedImage wall;
     BufferedImage nothing;
+    BufferedImage player;
 
     public ResourceManager(){
         this.classLoader = ResourceManager.class.getClassLoader();
@@ -19,6 +20,7 @@ public class ResourceManager {
         try {
             wall = ImageIO.read(new File(classLoader.getResource("Wall.png").getPath()));
             nothing = ImageIO.read(new File(classLoader.getResource("Nothing.png").getPath()));
+            player = ImageIO.read(new File(classLoader.getResource("Korok.jpg").getPath()));
             //....
             //...
             //...
@@ -33,6 +35,10 @@ public class ResourceManager {
     public BufferedImage getNothing() {
         return nothing;
     }
+    public BufferedImage getPlayer() {
+        return player;
+    }
+
 
 
 }

@@ -5,12 +5,12 @@ import java.awt.*;
 
 public class GameFrame extends JFrame{
 
-    JPanel gamePanel;
-    JPanel menuPanel;
+    GamePanel gamePanel;
+    MenuPanel menuPanel;
 
     public GameFrame() {
         super("TrashMan");
-        this.setSize(510, 590);
+        this.setSize(515, 590);
         this.setLocationRelativeTo(null); //odpalanie na srodku
 
         gamePanel = new GamePanel(500, 500);
@@ -21,6 +21,7 @@ public class GameFrame extends JFrame{
         add(menuPanel);
 
         setVisible(true);
+        gamePanel.startGameThread();
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
     }
 }
