@@ -1,4 +1,4 @@
-package AB;
+package AB.gui;
 
 import javax.swing.*;
 import java.awt.*;
