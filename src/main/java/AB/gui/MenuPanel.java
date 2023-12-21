@@ -37,6 +37,12 @@ public class MenuPanel extends JPanel {
         add(menuButton);
     }
 
+
+    @Override
+    public Dimension getPreferredSize() {
+        return new Dimension(500, 50);
+    }
+
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
@@ -46,11 +52,6 @@ public class MenuPanel extends JPanel {
         g2d.setColor(Color.white);
         g2d.fill(rectangle);
         // g2d.draw(rectangle);
-    }
-
-    @Override
-    public Dimension getPreferredSize() {
-        return new Dimension(500, 50);
     }
 
 

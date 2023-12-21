@@ -16,7 +16,7 @@ public class Music {
 
     public Music() throws LineUnavailableException, IOException, UnsupportedAudioFileException {
         ClassLoader classLoader = GameBoard.class.getClassLoader();
-        File audioFile = new File(classLoader.getResource("KorokForest.wav").getPath());
+        File audioFile = new File(classLoader.getResource("music/KorokForest.wav").getPath());
         AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(audioFile);
 
         clip = AudioSystem.getClip();

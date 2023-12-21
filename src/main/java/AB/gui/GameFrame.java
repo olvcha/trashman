@@ -2,6 +2,7 @@ package AB.gui;
 
 import javax.swing.*;
 import java.awt.*;
+import com.formdev.flatlaf.FlatDarculaLaf;
 
 public class GameFrame extends JFrame{
 
@@ -9,8 +10,13 @@ public class GameFrame extends JFrame{
     MenuPanel menuPanel;
 
     public GameFrame() {
-        super("TrashMan");
-        this.setSize(515, 590);
+        super("SuperKorok");
+        try {
+            UIManager.setLookAndFeel( new FlatDarculaLaf() );
+        } catch( Exception ex ) {
+            System.err.println("Failed to initialize theme. Using fallback.");
+        }
+        this.setSize(515, 587);
         this.setLocationRelativeTo(null); //odpalanie na srodku
 
         gamePanel = new GamePanel(500, 500);

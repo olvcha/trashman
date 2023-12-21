@@ -18,9 +18,9 @@ public class ResourceManager {
 
     private void loadResources(){
         try {
-            wall = ImageIO.read(new File(classLoader.getResource("Wall.png").getPath()));
-            nothing = ImageIO.read(new File(classLoader.getResource("Nothing.png").getPath()));
-            player = ImageIO.read(new File(classLoader.getResource("Korok.jpg").getPath()));
+            wall = ImageIO.read(new File(classLoader.getResource("textures/Tree.png").getPath()));
+            nothing = ImageIO.read(new File(classLoader.getResource("textures/Grass.png").getPath()));
+            player = ImageIO.read(new File(classLoader.getResource("textures/Korok.jpg").getPath()));
             //....
             //...
             //...
