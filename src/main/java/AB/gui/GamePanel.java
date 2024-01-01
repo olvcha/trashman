@@ -1,5 +1,6 @@
 package AB.gui;
 
+import AB.GameElements.Enemy;
 import AB.GameElements.Player;
 import AB.Mechanics.KeyHandler;
 import AB.reading.Music;
@@ -15,19 +16,17 @@ import java.io.IOException;
 public class GamePanel extends JPanel implements Runnable{
     private MenuPanel menuPanel;
     private Player player;
+    private Enemy enemy;
     private GameBoard gameBoard;
     private ResourceManager resourceManager;
     private int blockSize;
     private int width;
     private int height;
     private int blocksNumberInDirection;
-    private int playerX = 20;
-    private int playerY = 20;
-    final int playerSpeed = 3;
     final int FPS = 60;
-    KeyHandler keyHandler = new KeyHandler();
-    Thread gameThread;
-    Music music;
+    private KeyHandler keyHandler = new KeyHandler();
+    private Thread gameThread;
+    private Music music;
 
     public GamePanel(int width, int height, MenuPanel menuPanel){
         this.menuPanel = menuPanel;
@@ -38,7 +37,8 @@ public class GamePanel extends JPanel implements Runnable{
         this.addKeyListener(keyHandler);
         this.setFocusable(true);
         this.gameBoard = new GameBoard();
-        this.player = new Player();
+        this.player = new Player(gameBoard, menuPanel, this);
+        this.enemy = new Enemy(gameBoard, menuPanel, this);
         this.resourceManager = new ResourceManager();
         this.blockSize = width/this.blocksNumberInDirection; // width/25=20
         try {
@@ -70,72 +70,49 @@ public class GamePanel extends JPanel implements Runnable{
             lastTime = currentTime;
             if(delta >= 1){
                 update();
+                enemy.update();
                 repaint();
                 delta--;
             }
         }
-
-
-
     }
 
-    /**
-     * Updating the status of the game, information such as character position, checking collision with objects
-     */
-    public void update () {
-        boolean collision = false;
+    private void checkCollisionWithEnemy(int playerX, int playerY, int enemyX, int enemyY){
+        int playerCoordinateXindex = playerX/this.blockSize;
+        int playerCoordinateYindex = playerY/this.blockSize;
+
+        int enemyCoordinateXindex = enemyX/this.blockSize;
+        int enemyCoordinateYindex = enemyY/this.blockSize;
+
+        if(playerCoordinateXindex == enemyCoordinateXindex && playerCoordinateYindex == enemyCoordinateYindex){
+            player.decreaseScore();
+            player.setCoordinateX(20);
+            player.setCoordinateY(20);
+        }
+    }
+
+    public void update() {
         if (keyHandler.isUpPressed()) {
-            int playerYindex = (playerY+15)/blockSize - 1;
-            int playerXindex = (playerX+15)/blockSize;
-            int playerPositionIndex = playerYindex * blocksNumberInDirection + playerXindex;
-            if(gameBoard.getBoard().get(playerPositionIndex) != 'W'){
-                playerY -= playerSpeed;
-            }
-            checkCollision(playerPositionIndex);
+            player.moveUp();
+            checkCollisionWithEnemy(player.getCoordinateX(), player.getCoordinateY(), enemy.getCoordinateX(),
+                    enemy.getCoordinateY());
         }
         else if (keyHandler.isDownPressed()) {
-            int playerYindex = playerY/blockSize + 1;
-            int playerXindex = playerX/blockSize;
-            int playerPositionIndex = playerYindex * blocksNumberInDirection + playerXindex;
-            if(gameBoard.getBoard().get(playerPositionIndex) != 'W') {
-                playerY += playerSpeed;
-            }
-            checkCollision(playerPositionIndex);
+            player.moveDown();
+            checkCollisionWithEnemy(player.getCoordinateX(), player.getCoordinateY(), enemy.getCoordinateX(),
+                    enemy.getCoordinateY());
         }
         else if (keyHandler.isLeftPressed()) {
-            int playerYindex = (playerY+15)/blockSize;
-            int playerXindex = (playerX+15)/blockSize - 1;
-            int playerPositionIndex = playerYindex * blocksNumberInDirection + playerXindex;
-            if(gameBoard.getBoard().get(playerPositionIndex) != 'W') {
-                playerX -= playerSpeed;
-            }
-            checkCollision(playerPositionIndex);
+            player.moveLeft();
+            checkCollisionWithEnemy(player.getCoordinateX(), player.getCoordinateY(), enemy.getCoordinateX(),
+                    enemy.getCoordinateY());
         }
         else if (keyHandler.isRightPressed()) {
-            int playerYindex = playerY/blockSize;
-            int playerXindex = playerX/blockSize + 1;
-            int playerPositionIndex = playerYindex * blocksNumberInDirection + playerXindex;
-            if(gameBoard.getBoard().get(playerPositionIndex) != 'W') {
-                playerX += playerSpeed;
-            }
-            checkCollision(playerPositionIndex);
+            player.moveRight();
+            checkCollisionWithEnemy(player.getCoordinateX(), player.getCoordinateY(), enemy.getCoordinateX(),
+                    enemy.getCoordinateY());
         }
-    }
 
-    private void checkCollision(int playerPositionIndex){
-        if(gameBoard.getBoard().get(playerPositionIndex) == 'G'){
-            gameBoard.getBoard().set(playerPositionIndex, 'N');
-            player.increaseScore();
-        }
-        if(gameBoard.getBoard().get(playerPositionIndex) == 'P'){
-            gameBoard.getBoard().set(playerPositionIndex, 'N');
-            player.increaseScore();;
-        }
-        if(gameBoard.getBoard().get(playerPositionIndex) == 'B'){
-            gameBoard.getBoard().set(playerPositionIndex, 'N');
-            player.increaseScore();
-        }
-        menuPanel.getPointsLabel().setText("Points: " + player.getScore());
     }
     @Override
     public void paintComponent(Graphics g) {
@@ -172,7 +149,8 @@ public class GamePanel extends JPanel implements Runnable{
         }
 
         //Painting character
-        g.drawImage(resourceManager.getPlayer(),  playerX, playerY, this);
+        g.drawImage(resourceManager.getPlayer(),  player.getCoordinateX(), player.getCoordinateY(), this);
+        g.drawImage(resourceManager.getEnemy(),  enemy.getCoordinateX(), enemy.getCoordinateY(), this);
 
     }
 
@@ -181,6 +159,26 @@ public class GamePanel extends JPanel implements Runnable{
         return new Dimension(500, 500);
     }
 
+    @Override
+    public int getWidth() {
+        return width;
+    }
 
+    @Override
+    public int getHeight() {
+        return height;
+    }
+
+    public int getBlockSize() {
+        return blockSize;
+    }
+
+    public int getBlocksNumberInDirection() {
+        return blocksNumberInDirection;
+    }
+
+    public KeyHandler getKeyHandler() {
+        return keyHandler;
+    }
 }
 

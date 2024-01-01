@@ -15,7 +15,7 @@ public class GameBoard {
     public GameBoard(){
         board = new LinkedList<>();
         csvReader = new CsvReader();
-        board = csvReader.readCSV("maps/MapTrash.csv");
+        board = csvReader.readCSV("maps/MapTrashChuj.csv");
     }
 
     /**
