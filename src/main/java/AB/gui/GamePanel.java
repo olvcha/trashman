@@ -1,5 +1,6 @@
 package AB.gui;
 
+import AB.GameElements.Player;
 import AB.Mechanics.KeyHandler;
 import AB.reading.Music;
 import AB.reading.ResourceManager;
@@ -12,6 +13,8 @@ import java.awt.geom.*;
 import java.io.IOException;
 
 public class GamePanel extends JPanel implements Runnable{
+    private MenuPanel menuPanel;
+    private Player player;
     private GameBoard gameBoard;
     private ResourceManager resourceManager;
     private int blockSize;
@@ -20,13 +23,14 @@ public class GamePanel extends JPanel implements Runnable{
     private int blocksNumberInDirection;
     private int playerX = 20;
     private int playerY = 20;
-    final int playerSpeed = 5;
+    final int playerSpeed = 3;
     final int FPS = 60;
     KeyHandler keyHandler = new KeyHandler();
     Thread gameThread;
     Music music;
 
-    public GamePanel(int width, int height){
+    public GamePanel(int width, int height, MenuPanel menuPanel){
+        this.menuPanel = menuPanel;
         this.width = width;
         this.height = height;
         this.blocksNumberInDirection = 25;
@@ -34,6 +38,7 @@ public class GamePanel extends JPanel implements Runnable{
         this.addKeyListener(keyHandler);
         this.setFocusable(true);
         this.gameBoard = new GameBoard();
+        this.player = new Player();
         this.resourceManager = new ResourceManager();
         this.blockSize = width/this.blocksNumberInDirection; // width/25=20
         try {
@@ -75,9 +80,10 @@ public class GamePanel extends JPanel implements Runnable{
     }
 
     /**
-     * Updating the status of the game, information such as character position
+     * Updating the status of the game, information such as character position, checking collision with objects
      */
     public void update () {
+        boolean collision = false;
         if (keyHandler.isUpPressed()) {
             int playerYindex = (playerY+15)/blockSize - 1;
             int playerXindex = (playerX+15)/blockSize;
@@ -85,7 +91,7 @@ public class GamePanel extends JPanel implements Runnable{
             if(gameBoard.getBoard().get(playerPositionIndex) != 'W'){
                 playerY -= playerSpeed;
             }
-
+            checkCollision(playerPositionIndex);
         }
         else if (keyHandler.isDownPressed()) {
             int playerYindex = playerY/blockSize + 1;
@@ -94,6 +100,7 @@ public class GamePanel extends JPanel implements Runnable{
             if(gameBoard.getBoard().get(playerPositionIndex) != 'W') {
                 playerY += playerSpeed;
             }
+            checkCollision(playerPositionIndex);
         }
         else if (keyHandler.isLeftPressed()) {
             int playerYindex = (playerY+15)/blockSize;
@@ -102,6 +109,7 @@ public class GamePanel extends JPanel implements Runnable{
             if(gameBoard.getBoard().get(playerPositionIndex) != 'W') {
                 playerX -= playerSpeed;
             }
+            checkCollision(playerPositionIndex);
         }
         else if (keyHandler.isRightPressed()) {
             int playerYindex = playerY/blockSize;
@@ -110,7 +118,24 @@ public class GamePanel extends JPanel implements Runnable{
             if(gameBoard.getBoard().get(playerPositionIndex) != 'W') {
                 playerX += playerSpeed;
             }
+            checkCollision(playerPositionIndex);
         }
+    }
+
+    private void checkCollision(int playerPositionIndex){
+        if(gameBoard.getBoard().get(playerPositionIndex) == 'G'){
+            gameBoard.getBoard().set(playerPositionIndex, 'N');
+            player.increaseScore();
+        }
+        if(gameBoard.getBoard().get(playerPositionIndex) == 'P'){
+            gameBoard.getBoard().set(playerPositionIndex, 'N');
+            player.increaseScore();;
+        }
+        if(gameBoard.getBoard().get(playerPositionIndex) == 'B'){
+            gameBoard.getBoard().set(playerPositionIndex, 'N');
+            player.increaseScore();
+        }
+        menuPanel.getPointsLabel().setText("Points: " + player.getScore());
     }
     @Override
     public void paintComponent(Graphics g) {
@@ -128,6 +153,18 @@ public class GamePanel extends JPanel implements Runnable{
                         break;
                     case 'N':
                         g.drawImage(resourceManager.getNothing(), width * this.blockSize, height * this.blockSize,
+                                this);
+                        break;
+                    case 'G':
+                        g.drawImage(resourceManager.getGlass(), width * this.blockSize, height * this.blockSize,
+                                this);
+                        break;
+                    case 'P':
+                        g.drawImage(resourceManager.getPlastic(), width * this.blockSize, height * this.blockSize,
+                                this);
+                        break;
+                    case 'B':
+                        g.drawImage(resourceManager.getPaper(), width * this.blockSize, height * this.blockSize,
                                 this);
                         break;
                 }

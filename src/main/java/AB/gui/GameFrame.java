@@ -19,8 +19,9 @@ public class GameFrame extends JFrame{
         this.setSize(515, 587);
         this.setLocationRelativeTo(null); //odpalanie na srodku
 
-        gamePanel = new GamePanel(500, 500);
         menuPanel = new MenuPanel();
+        gamePanel = new GamePanel(500, 500, menuPanel);
+
 
         setLayout(new FlowLayout(FlowLayout.LEFT, 0, 0));
         add(gamePanel);

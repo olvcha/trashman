@@ -1,10 +1,16 @@
 package AB.gui;
 
+import lombok.Getter;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.geom.Rectangle2D;
 
 public class MenuPanel extends JPanel {
+    private JLabel levelLabel;
+    @Getter
+    private JLabel pointsLabel;
+    private JButton menuButton;
 
     public MenuPanel(){
         setPreferredSize(new Dimension(500, 50));
@@ -13,12 +19,12 @@ public class MenuPanel extends JPanel {
     }
 
     /**
-     * shjishish
+     * Creating menu section, including current level, points and menu button
      */
     private void createMenuSection(){
-        JLabel levelLabel = new JLabel("Poziom: x");
-        JLabel pointsLabel = new JLabel("Punkty: x");
-        JButton menuButton = new JButton("Menu");
+        levelLabel = new JLabel("Poziom: x");
+        pointsLabel = new JLabel("Punkty: ");
+        menuButton = new JButton("Menu");
 
         levelLabel.setHorizontalAlignment(SwingConstants.CENTER);
         levelLabel.setVerticalAlignment(SwingConstants.CENTER);

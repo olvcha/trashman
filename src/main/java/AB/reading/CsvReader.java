@@ -10,7 +10,11 @@ import java.util.List;
 
 public class CsvReader {
 
-
+    /**
+     * Reading csv file, returning game board
+     * @param resource
+     * @return
+     */
     public List<Character> readCSV(String resource) {
         ClassLoader classLoader = GameBoard.class.getClassLoader();
         String csvFilePath = classLoader.getResource(resource).getPath();
