@@ -9,6 +9,7 @@ import java.awt.*;
 
 public class Player extends Character{
     private int score = 0;
+    private int hearts = 3;
 
     public Player(GameBoard gb, MenuPanel mp, GamePanel gp) {
         super(20,20,2, gb, mp, gp);
@@ -80,10 +81,18 @@ public class Player extends Character{
     public int getScore() {
         return score;
     }
+
+    public int getHearts() {
+        return hearts;
+    }
+
     public void increaseScore(){
         this.score += 1;
     }
     public void decreaseScore(){
         this.score -= 1;
+    }
+    public void decreaseHearts(){
+        this.hearts -= 1;
     }
 }

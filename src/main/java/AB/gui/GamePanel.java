@@ -15,6 +15,7 @@ import java.io.IOException;
 
 public class GamePanel extends JPanel implements Runnable{
     private MenuPanel menuPanel;
+    //private GameOverPanel gameOver;
     private Player player;
     private Enemy enemy;
     private GameBoard gameBoard;
@@ -23,6 +24,7 @@ public class GamePanel extends JPanel implements Runnable{
     private int width;
     private int height;
     private int blocksNumberInDirection;
+    private JLabel gameOver;
     final int FPS = 60;
     private KeyHandler keyHandler = new KeyHandler();
     private Thread gameThread;
@@ -40,17 +42,27 @@ public class GamePanel extends JPanel implements Runnable{
         this.player = new Player(gameBoard, menuPanel, this);
         this.enemy = new Enemy(gameBoard, menuPanel, this);
         this.resourceManager = new ResourceManager();
+        this.gameOver = new JLabel("");
         this.blockSize = width/this.blocksNumberInDirection; // width/25=20
         try {
             this.music = new Music();
         } catch (UnsupportedAudioFileException | IOException | LineUnavailableException e) {
             throw new RuntimeException(e);
         }
+
+        Font centuryGothicFont = new Font("Century Gothic", Font.PLAIN, 40);
+        gameOver.setFont(centuryGothicFont);
+        this.add(gameOver);
     }
     public void startGameThread(){
         gameThread = new Thread(this);
         gameThread.start();
         music.play();
+    }
+
+    public void endGameThread(){
+        gameThread.stop();
+        music.stop();
     }
 
     /**
@@ -85,7 +97,7 @@ public class GamePanel extends JPanel implements Runnable{
         int enemyCoordinateYindex = enemyY/this.blockSize;
 
         if(playerCoordinateXindex == enemyCoordinateXindex && playerCoordinateYindex == enemyCoordinateYindex){
-            player.decreaseScore();
+            player.decreaseHearts();
             player.setCoordinateX(20);
             player.setCoordinateY(20);
         }
@@ -151,6 +163,30 @@ public class GamePanel extends JPanel implements Runnable{
         //Painting character
         g.drawImage(resourceManager.getPlayer(),  player.getCoordinateX(), player.getCoordinateY(), this);
         g.drawImage(resourceManager.getEnemy(),  enemy.getCoordinateX(), enemy.getCoordinateY(), this);
+
+        //Painting hearts
+        switch(player.getHearts()){
+            case 0: {
+                gameOver.setText("Game over!");
+                endGameThread();
+
+            }
+            case 1:{
+                g.drawImage(resourceManager.getHeart(),  0, 0, this);
+                break;
+            }
+            case 2:{
+                g.drawImage(resourceManager.getHeart(),  0, 0, this);
+                g.drawImage(resourceManager.getHeart(),  20, 0, this);
+                break;
+            }
+            case 3:{
+                g.drawImage(resourceManager.getHeart(),  0, 0, this);
+                g.drawImage(resourceManager.getHeart(),  20, 0, this);
+                g.drawImage(resourceManager.getHeart(),  40, 0, this);
+                break;
+            }
+        }
 
     }
 

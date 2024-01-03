@@ -16,7 +16,7 @@ public class GameFrame extends JFrame{
         } catch( Exception ex ) {
             System.err.println("Failed to initialize theme. Using fallback.");
         }
-        this.setSize(515, 587);
+        this.setSize(516, 590);
         this.setLocationRelativeTo(null); //odpalanie na srodku
 
         menuPanel = new MenuPanel();

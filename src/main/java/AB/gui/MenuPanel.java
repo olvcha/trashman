@@ -10,20 +10,25 @@ public class MenuPanel extends JPanel {
     private JLabel levelLabel;
     @Getter
     private JLabel pointsLabel;
+    @Getter
     private JButton menuButton;
+    private JButton newGame;
+    private JButton exit;
+    private JButton gameButton;
 
     public MenuPanel(){
         setPreferredSize(new Dimension(500, 50));
-        setLayout(new GridLayout(1, 3));
+        setLayout(new FlowLayout());
         createMenuSection();
+        addActionListener();
     }
 
     /**
      * Creating menu section, including current level, points and menu button
      */
     private void createMenuSection(){
-        levelLabel = new JLabel("Poziom: x");
-        pointsLabel = new JLabel("Punkty: ");
+        levelLabel = new JLabel("Poziom:                    ");
+        pointsLabel = new JLabel("Punkty:                   ");
         menuButton = new JButton("Menu");
 
         levelLabel.setHorizontalAlignment(SwingConstants.CENTER);
@@ -41,6 +46,44 @@ public class MenuPanel extends JPanel {
         add(levelLabel);
         add(pointsLabel);
         add(menuButton);
+    }
+
+    private void createMenuContent(){
+        remove(levelLabel);
+        remove(pointsLabel);
+        remove(menuButton);
+
+        this.repaint();
+        newGame =  new JButton("New game");
+        exit = new JButton("Exit");
+        gameButton = new JButton("Game");
+        //newGame.setPreferredSize(new Dimension(60, 20));
+
+        newGame.setHorizontalAlignment(SwingConstants.CENTER);
+        newGame.setVerticalAlignment(SwingConstants.CENTER);
+        exit.setHorizontalAlignment(SwingConstants.CENTER);
+        exit.setVerticalAlignment(SwingConstants.CENTER);
+        gameButton.setHorizontalAlignment(SwingConstants.CENTER);
+        gameButton.setVerticalAlignment(SwingConstants.CENTER);
+
+        Font centuryGothicFont = new Font("Century Gothic", Font.PLAIN, 18);
+        newGame.setFont(centuryGothicFont);
+        exit.setFont(centuryGothicFont);
+        gameButton.setFont(centuryGothicFont);
+
+
+
+        add(newGame);
+        add(exit);
+        add(gameButton);
+        this.revalidate();
+        this.repaint();
+    }
+
+    private void addActionListener(){
+        menuButton.addActionListener(e -> {
+            createMenuContent();
+        });
     }
 
 
