@@ -13,7 +13,7 @@ public class CsvReader {
     /**
      * Reading csv file, returning game board
      * @param resource
-     * @return
+     * @return board or null if it is not possible to read a board
      */
     public List<Character> readCSV(String resource) {
         ClassLoader classLoader = GameBoard.class.getClassLoader();

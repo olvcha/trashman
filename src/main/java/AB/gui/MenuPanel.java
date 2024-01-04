@@ -74,8 +74,6 @@ public class MenuPanel extends JPanel {
      * Creating menu content which displays after pressing button "Menu" from menu section
      */
     private void createMenuContent(){
-
-
         JPanel menuContent = new JPanel();
 
         newGame =  new JButton("New game");
@@ -135,6 +133,8 @@ public class MenuPanel extends JPanel {
     public Dimension getPreferredSize() {
         return new Dimension(500, 50);
     }
+
+
 
 
 
