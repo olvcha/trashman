@@ -15,13 +15,15 @@ public class StartPanel extends JPanel {
     private JFrame frame;
     private JButton startButton;
     private JLabel mainTitleLabel;
-    private JLabel nothing;
 
+    /**
+     * StartPanel class constructor
+     * @param frame main frame
+     */
     public StartPanel(JFrame frame) {
         this.frame = frame;
         this.startButton = new JButton("Start");
         this.mainTitleLabel = new JLabel("Game menu");
-        this.nothing = new JLabel("");
         //this.setLayout(new FlowLayout(FlowLayout.CENTER));
         //this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         this.setLayout(new GridLayout(5, 3));
@@ -30,6 +32,9 @@ public class StartPanel extends JPanel {
 
     }
 
+    /**
+     * Initializing content of the start panel such as main ttle, start button
+     */
     private void initialize() {
         this.mainTitleLabel.setHorizontalAlignment(SwingConstants.CENTER);
         this.mainTitleLabel.setVerticalAlignment(SwingConstants.CENTER);
@@ -39,19 +44,16 @@ public class StartPanel extends JPanel {
         this.startButton.setMaximumSize(new Dimension(100, 50));
         this.startButton.setFocusable(false);
 
-        //this.add(this.nothing);
         this.add(this.mainTitleLabel);
-        //this.add(this.nothing);
-
-        //this.add(this.nothing);
         this.add(this.startButton);
-        //this.add(this.nothing);
-
 
         addListener();
 
     }
 
+    /**
+     * Action listener for start button from method initialize(), it disposes current frame and starts a new game
+     */
     private void addListener() {
         this.startButton.addActionListener(e -> {
             frame.dispose();

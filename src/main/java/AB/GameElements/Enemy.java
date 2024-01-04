@@ -9,9 +9,19 @@ import java.util.Random;
 public class Enemy extends Character{
     private int direction;
 
-    public Enemy(GameBoard gb, MenuPanel mp, GamePanel gp) {
-        super(300,300,1, gb, mp, gp);
+    /**
+     * Enemy class constructor
+     * @param gameBoard game board
+     * @param menuPanel menu panel
+     * @param gamePanel game panel
+     */
+    public Enemy(GameBoard gameBoard, MenuPanel menuPanel, GamePanel gamePanel) {
+        super(300,300,1, gameBoard, menuPanel, gamePanel);
     }
+
+    /**
+     * Updating the current position of the enemy
+     */
     public void update (){
         if(direction == 0){
             moveUp();
@@ -27,6 +37,9 @@ public class Enemy extends Character{
         }
     }
 
+    /**
+     * Enemy's move up
+     */
     public void moveUp(){
         int coordinateYindex = (coordinateY+15)/gamePanel.getBlockSize() - 1;
         int coordinateXindex = (coordinateX+15)/gamePanel.getBlockSize();
@@ -38,6 +51,9 @@ public class Enemy extends Character{
             pickDirection();
         }
     }
+    /**
+     * Enemy's move down
+     */
     public void moveDown(){
         int coordinateYindex = coordinateY/gamePanel.getBlockSize() + 1;
         int coordinateXindex = coordinateX/gamePanel.getBlockSize();
@@ -49,6 +65,9 @@ public class Enemy extends Character{
             pickDirection();
         }
     }
+    /**
+     * Enemy's move left
+     */
     public void moveLeft(){
         int coordinateYindex = (coordinateY+15)/gamePanel.getBlockSize();
         int coordinateXindex = (coordinateX+15)/gamePanel.getBlockSize() - 1;
@@ -60,6 +79,9 @@ public class Enemy extends Character{
             pickDirection();
         }
     }
+    /**
+     * Enemy's move right
+     */
     public void moveRight(){
         int coordinateYindex = coordinateY/gamePanel.getBlockSize();
         int coordinateXindex = coordinateX/gamePanel.getBlockSize() + 1;
@@ -72,10 +94,20 @@ public class Enemy extends Character{
         }
     }
 
+    /**
+     * Calculating enemy's position index
+     * @param coordinateXindex coordinate X index
+     * @param coordinateYindex coordinate Y index
+     * @return enemy position index
+     */
+
     public int enemyPositionIndex(int coordinateXindex, int coordinateYindex){
         return coordinateYindex * gamePanel.getBlocksNumberInDirection() + coordinateXindex;
     }
 
+    /**
+     * Picking enemy's next move direction, it happens randomly
+     */
     private void pickDirection(){
         Random random = new Random();
         int direction = this.direction;

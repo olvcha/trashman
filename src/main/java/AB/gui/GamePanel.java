@@ -15,7 +15,6 @@ import java.io.IOException;
 
 public class GamePanel extends JPanel implements Runnable{
     private MenuPanel menuPanel;
-    //private GameOverPanel gameOver;
     private Player player;
     private Enemy enemy;
     private GameBoard gameBoard;
@@ -30,6 +29,12 @@ public class GamePanel extends JPanel implements Runnable{
     private Thread gameThread;
     private Music music;
 
+    /**
+     * GamePanel class constructor
+     * @param width width of the game panel
+     * @param height height of the game panel
+     * @param menuPanel menu panel
+     */
     public GamePanel(int width, int height, MenuPanel menuPanel){
         this.menuPanel = menuPanel;
         this.width = width;
@@ -54,12 +59,19 @@ public class GamePanel extends JPanel implements Runnable{
         gameOver.setFont(centuryGothicFont);
         this.add(gameOver);
     }
+
+    /**
+     * Starting game thread
+     */
     public void startGameThread(){
         gameThread = new Thread(this);
         gameThread.start();
         music.play();
     }
 
+    /**
+     * Ending game thread
+     */
     public void endGameThread(){
         gameThread.stop();
         music.stop();
@@ -89,6 +101,13 @@ public class GamePanel extends JPanel implements Runnable{
         }
     }
 
+    /**
+     * Checking collision between two objects - a player and an enemy
+     * @param playerX player's x coordinate
+     * @param playerY player's y coordinate
+     * @param enemyX enemy's x coordinate
+     * @param enemyY enemy's y coordinate
+     */
     private void checkCollisionWithEnemy(int playerX, int playerY, int enemyX, int enemyY){
         int playerCoordinateXindex = playerX/this.blockSize;
         int playerCoordinateYindex = playerY/this.blockSize;
@@ -103,6 +122,9 @@ public class GamePanel extends JPanel implements Runnable{
         }
     }
 
+    /**
+     * Updating the map after player's move, checking collision with enemy
+     */
     public void update() {
         if (keyHandler.isUpPressed()) {
             player.moveUp();
@@ -126,6 +148,11 @@ public class GamePanel extends JPanel implements Runnable{
         }
 
     }
+
+    /**
+     * Painting the game board, including things such as walls, grass, characters etc.
+     * @param g the <code>Graphics</code> object to protect
+     */
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
@@ -190,6 +217,10 @@ public class GamePanel extends JPanel implements Runnable{
 
     }
 
+    /**
+     * Getting preferred size of a panel
+     * @return dimension
+     */
     @Override
     public Dimension getPreferredSize() {
         return new Dimension(500, 500);

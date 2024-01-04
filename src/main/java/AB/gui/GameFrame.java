@@ -9,6 +9,9 @@ public class GameFrame extends JFrame{
     GamePanel gamePanel;
     MenuPanel menuPanel;
 
+    /**
+     * GameFrame class constructor
+     */
     public GameFrame() {
         super("SuperKorok");
         try {
@@ -19,9 +22,8 @@ public class GameFrame extends JFrame{
         this.setSize(516, 590);
         this.setLocationRelativeTo(null); //odpalanie na srodku
 
-        menuPanel = new MenuPanel();
+        menuPanel = new MenuPanel(this);
         gamePanel = new GamePanel(500, 500, menuPanel);
-
 
         setLayout(new FlowLayout(FlowLayout.LEFT, 0, 0));
         add(gamePanel);

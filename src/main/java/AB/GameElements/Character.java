@@ -12,26 +12,26 @@ public class Character {
     protected int coordinateY;
     protected int speed;
 
-    public Character(int x, int y, int s, GameBoard gb, MenuPanel mp, GamePanel gp){
-        this.coordinateX = x;
-        this.coordinateY = y;
-        this.speed = s;
-        this.gameBoard = gb;
-        this.menuPanel = mp;
-        this.gamePanel = gp;
+
+    /**
+     * Character class constructor
+     * @param coordinateX x coordinate
+     * @param coordinateY y coordinate
+     * @param speed character's speed
+     * @param gameBoard gameBoard
+     * @param menuPanel menuPanel
+     * @param gamePanel gamePanel
+     */
+    public Character(int coordinateX, int coordinateY, int speed, GameBoard gameBoard, MenuPanel menuPanel,
+                     GamePanel gamePanel){
+        this.coordinateX = coordinateX;
+        this.coordinateY = coordinateY;
+        this.speed = speed;
+        this.gameBoard = gameBoard;
+        this.menuPanel = menuPanel;
+        this.gamePanel = gamePanel;
 
     }
-    public void checkCollisionWithWall (){
-        int coordinateYindex = (coordinateY+15)/gamePanel.getBlockSize() - 1;
-        int coordinateXindex = (coordinateX+15)/gamePanel.getBlockSize();
-        int characterPositionIndex = coordinateYindex * gamePanel.getBlocksNumberInDirection() + coordinateXindex;
-        if(gameBoard.getBoard().get(characterPositionIndex) != 'W'){
-            coordinateY -= speed;
-        }
-    }
-
-
-
     public int getCoordinateX() {
         return coordinateX;
     }
@@ -52,7 +52,4 @@ public class Character {
         this.coordinateY = coordinateY;
     }
 
-    public void setSpeed(int speed) {
-        this.speed = speed;
-    }
 }

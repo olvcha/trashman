@@ -20,7 +20,7 @@ public class GameBoard {
 
     /**
      * Displaying game board
-     * @return
+     * @return appearance of the board
      */
     public List<Character> getBoard() {
         return board;
