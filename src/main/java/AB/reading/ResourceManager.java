@@ -15,6 +15,7 @@ public class ResourceManager {
     BufferedImage plastic;
     BufferedImage paper;
     BufferedImage heart;
+    BufferedImage background;
 
 
 
@@ -36,6 +37,8 @@ public class ResourceManager {
             plastic = ImageIO.read(new File(classLoader.getResource("textures/plastic.png").getPath()));
             paper = ImageIO.read(new File(classLoader.getResource("textures/paper.png").getPath()));
             heart = ImageIO.read(new File(classLoader.getResource("textures/heart.png").getPath()));
+            background = ImageIO.read(new File(classLoader.getResource("textures/background.jpg").getPath()));
+
 
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -54,6 +57,7 @@ public class ResourceManager {
     public BufferedImage getPaper() { return paper; }
     public BufferedImage getEnemy() { return enemy; }
     public BufferedImage getHeart() { return heart; }
+    public BufferedImage getBackground() { return background; }
 
 
 

@@ -27,25 +27,25 @@ public class MenuPanel extends JPanel {
      * Creating menu section, including current level, points and menu button
      */
     private void createMenuSection(){
-        levelLabel = new JLabel("Poziom:                    ");
-        pointsLabel = new JLabel("Punkty:                   ");
-        menuButton = new JButton("Menu");
+        this.levelLabel = new JLabel("Poziom:                    ");
+        this.pointsLabel = new JLabel("Punkty:                   ");
+        this.menuButton = new JButton("Menu");
 
-        levelLabel.setHorizontalAlignment(SwingConstants.CENTER);
-        levelLabel.setVerticalAlignment(SwingConstants.CENTER);
-        pointsLabel.setHorizontalAlignment(SwingConstants.CENTER);
-        pointsLabel.setVerticalAlignment(SwingConstants.CENTER);
-        menuButton.setHorizontalAlignment(SwingConstants.CENTER);
-        menuButton.setVerticalAlignment(SwingConstants.CENTER);
+        this.levelLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        this.levelLabel.setVerticalAlignment(SwingConstants.CENTER);
+        this.pointsLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        this.pointsLabel.setVerticalAlignment(SwingConstants.CENTER);
+        this.menuButton.setHorizontalAlignment(SwingConstants.CENTER);
+        this.menuButton.setVerticalAlignment(SwingConstants.CENTER);
 
         Font centuryGothicFont = new Font("Century Gothic", Font.PLAIN, 18);
-        levelLabel.setFont(centuryGothicFont);
-        pointsLabel.setFont(centuryGothicFont);
-        menuButton.setFont(centuryGothicFont);
+        this.levelLabel.setFont(centuryGothicFont);
+        this.pointsLabel.setFont(centuryGothicFont);
+        this.menuButton.setFont(centuryGothicFont);
 
-        add(levelLabel);
-        add(pointsLabel);
-        add(menuButton);
+        this.add(levelLabel);
+        this.add(pointsLabel);
+        this.add(menuButton);
     }
 
     private void createMenuContent(){
