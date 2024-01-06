@@ -3,17 +3,44 @@ import AB.Mechanics.KeyHandler;
 import AB.gui.GameBoard;
 import AB.gui.GamePanel;
 import AB.gui.MenuPanel;
+import lombok.Getter;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.LinkedList;
+import java.util.List;
 
 public class Player extends Character{
     private int score = 0;
     private int hearts = 3;
     private int trashCollected = 0;
+    @Getter
+    private GameBoard gameBoard;
+    @Getter
+    private List<List<java.lang.Character>> boards;
+    @Getter
+    private List<java.lang.Character> levelsDone;
 
-    public Player(GameBoard gb, MenuPanel mp, GamePanel gp) {
-        super(20,20,2, gb, mp, gp);
+    public Player() {
+        super(20,20,2);
+        this.levelsDone = new LinkedList<>();
+        levelsDone.add('X');
+        gameBoard = new GameBoard();
+    }
+
+    public void setCurrentGame(MenuPanel menuPanel, GamePanel gamePanel){
+        this.menuPanel = menuPanel;
+        this.gamePanel = gamePanel;
+        this.boards = gameBoard.getBoards();
+        this.setCoordinateX(20);
+        this.setCoordinateY(20);
+        this.trashCollected = 0;
+    }
+
+    public void updateLevelsDone(char map, int level){
+        this.levelsDone.add(map);
+        //this.boards.remove(level);
+        //System.out.println(boards.size());
     }
 
     public void moveUp(){

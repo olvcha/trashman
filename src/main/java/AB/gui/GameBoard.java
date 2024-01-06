@@ -2,6 +2,7 @@ package AB.gui;
 
 import AB.reading.CsvReader;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -22,10 +23,10 @@ public class GameBoard {
         this.boardP = new LinkedList<>();
         this.boardG = new LinkedList<>();
         this.boardB = new LinkedList<>();
-        this.boards = new LinkedList<>();
+        this.boards = new ArrayList<>();
 
         this.csvReader = new CsvReader();
-        this.currentMap = 'A';
+        //this.currentMap = 'A';
         this.boardA = csvReader.readCSV("maps/MapTrashA.csv");
         this.boardP = csvReader.readCSV("maps/MapTrashP.csv");
         this.boardG = csvReader.readCSV("maps/MapTrashG.csv");

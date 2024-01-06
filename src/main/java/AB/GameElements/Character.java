@@ -30,7 +30,12 @@ public class Character {
         this.gameBoard = gameBoard;
         this.menuPanel = menuPanel;
         this.gamePanel = gamePanel;
+    }
 
+    public Character(int coordinateX, int coordinateY, int speed){
+        this.coordinateX = coordinateX;
+        this.coordinateY = coordinateY;
+        this.speed = speed;
     }
     public int getCoordinateX() {
         return coordinateX;

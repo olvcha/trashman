@@ -1,5 +1,7 @@
 package AB.gui;
 
+import AB.GameElements.Player;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -7,6 +9,7 @@ public class StartPanel extends JPanel {
     private JFrame frame;
     private JButton startButton;
     private JLabel mainTitleLabel;
+    private Player player;
 
     /**
      * StartPanel class constructor
@@ -49,7 +52,8 @@ public class StartPanel extends JPanel {
     private void addListener() {
         this.startButton.addActionListener(e -> {
             frame.dispose();
-            new GameFrame();
+            this.player = new Player();
+            new GameFrame(player);
         });
     }
 

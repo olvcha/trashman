@@ -1,5 +1,6 @@
 package AB.gui;
 
+import AB.GameElements.Player;
 import lombok.Getter;
 
 import javax.swing.*;
@@ -19,13 +20,15 @@ public class MenuPanel extends JPanel {
     private JButton newGame;
     private JButton exit;
     private JButton gameButton;
+    private Player player;
 
 
     /**
      * MenuPanel class constructor
      * @param frame game frame
      */
-    public MenuPanel(JFrame frame){
+    public MenuPanel(JFrame frame, Player player){
+        this.player = player;
         this.frame = frame;
         this.cardLayout = new CardLayout();
         this.cardPanel = new JPanel(cardLayout);
@@ -96,7 +99,7 @@ public class MenuPanel extends JPanel {
         newGame.addActionListener(e -> {
 
             this.frame.dispose();
-            SwingUtilities.invokeLater(GameFrame::new);
+            new GameFrame(player);
         });
 
         exit.addActionListener(e -> {

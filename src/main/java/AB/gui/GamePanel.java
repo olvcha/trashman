@@ -21,9 +21,8 @@ public class GamePanel extends JPanel implements Runnable{
     private MenuPanel menuPanel;
     private Player player;
     private Enemy enemy;
-    private GameBoard gameBoard;
+
     private ResourceManager resourceManager;
-    private List<List<Character>> boards;
     private int blockSize;
     private int width;
     private int height;
@@ -34,7 +33,8 @@ public class GamePanel extends JPanel implements Runnable{
     private KeyHandler keyHandler = new KeyHandler();
     private Thread gameThread;
     private Music music;
-    private List<Character> levelsDone;
+    private char mapType = 'X';
+
 
     /**
      * GamePanel class constructor
@@ -42,7 +42,7 @@ public class GamePanel extends JPanel implements Runnable{
      * @param height height of the game panel
      * @param menuPanel menu panel
      */
-    public GamePanel(int width, int height, MenuPanel menuPanel, GameFrame frame){
+    public GamePanel(int width, int height, MenuPanel menuPanel, GameFrame frame, Player player){
         this.frame = frame;
         this.menuPanel = menuPanel;
         this.width = width;
@@ -51,14 +51,15 @@ public class GamePanel extends JPanel implements Runnable{
         this.setPreferredSize(new Dimension(width, height));
         this.addKeyListener(keyHandler);
         this.setFocusable(true);
-        this.gameBoard = new GameBoard();
-        this.boards = gameBoard.getBoards();
-        this.player = new Player(gameBoard, menuPanel, this);
-        this.enemy = new Enemy(gameBoard, menuPanel, this);
+
+        this.player = player;
+        player.setCurrentGame(menuPanel, this);
+
+        //this.player = new Player(menuPanel, this);
+        this.enemy = new Enemy(player.getGameBoard(), menuPanel, this);
         this.resourceManager = new ResourceManager();
         this.gameOver = new JLabel("");
-        this.levelsDone = new LinkedList<>();
-        levelsDone.add('X');
+
         this.blockSize = width/this.blocksNumberInDirection; // width/25=20
         try {
             this.music = new Music();
@@ -69,6 +70,7 @@ public class GamePanel extends JPanel implements Runnable{
         Font centuryGothicFont = new Font("Century Gothic", Font.PLAIN, 40);
         gameOver.setFont(centuryGothicFont);
         this.add(gameOver);
+        chooseLevel();
     }
 
     /**
@@ -84,8 +86,8 @@ public class GamePanel extends JPanel implements Runnable{
      * Ending game thread
      */
     public void endGameThread(){
-        gameThread.stop();
         music.stop();
+        gameThread.stop();
     }
 
     /**
@@ -98,7 +100,6 @@ public class GamePanel extends JPanel implements Runnable{
         double delta = 0;
         long lastTime = System.nanoTime();
         long currentTime;
-        chooseLevel();
 
         while(gameThread != null){
             currentTime = System.nanoTime();
@@ -111,20 +112,22 @@ public class GamePanel extends JPanel implements Runnable{
                 repaint();
                 delta--;
             }
-//            if(trashAmount < player.getScore()){
-//                break;
-//            }
+
             if(player.getTrashCollected() == trashAmount){
-                //chooseLevel();
+                if(player.getLevelsDone().size() == 5){
+                    System.out.println("You saved Korok Forest Yahahaha!");
+                    endGameThread();
+                }
+                System.out.println(this.mapType + " level done");
                 trashAmount = 0;
                 this.frame.dispose();
-                SwingUtilities.invokeLater(GameFrame::new);
+                keyHandler = null;
+                new GameFrame(player);
+                endGameThread();
             }
         }
 
-        if(boards.isEmpty()){
-            endGameThread();
-        }
+
 
     }
 
@@ -153,71 +156,71 @@ public class GamePanel extends JPanel implements Runnable{
      * Updating the map after player's move, checking collision with an enemy
      */
     public void update() {
-        if (keyHandler.isUpPressed()) {
-            player.moveUp();
-            checkCollisionWithEnemy(player.getCoordinateX(), player.getCoordinateY(), enemy.getCoordinateX(),
-                    enemy.getCoordinateY());
+        if(keyHandler != null) {
+            if (keyHandler.isUpPressed()) {
+                player.moveUp();
+                checkCollisionWithEnemy(player.getCoordinateX(), player.getCoordinateY(), enemy.getCoordinateX(),
+                        enemy.getCoordinateY());
+            } else if (keyHandler.isDownPressed()) {
+                player.moveDown();
+                checkCollisionWithEnemy(player.getCoordinateX(), player.getCoordinateY(), enemy.getCoordinateX(),
+                        enemy.getCoordinateY());
+            } else if (keyHandler.isLeftPressed()) {
+                player.moveLeft();
+                checkCollisionWithEnemy(player.getCoordinateX(), player.getCoordinateY(), enemy.getCoordinateX(),
+                        enemy.getCoordinateY());
+            } else if (keyHandler.isRightPressed()) {
+                player.moveRight();
+                checkCollisionWithEnemy(player.getCoordinateX(), player.getCoordinateY(), enemy.getCoordinateX(),
+                        enemy.getCoordinateY());
+            }
         }
-        else if (keyHandler.isDownPressed()) {
-            player.moveDown();
-            checkCollisionWithEnemy(player.getCoordinateX(), player.getCoordinateY(), enemy.getCoordinateX(),
-                    enemy.getCoordinateY());
-        }
-        else if (keyHandler.isLeftPressed()) {
-            player.moveLeft();
-            checkCollisionWithEnemy(player.getCoordinateX(), player.getCoordinateY(), enemy.getCoordinateX(),
-                    enemy.getCoordinateY());
-        }
-        else if (keyHandler.isRightPressed()) {
-            player.moveRight();
-            checkCollisionWithEnemy(player.getCoordinateX(), player.getCoordinateY(), enemy.getCoordinateX(),
-                    enemy.getCoordinateY());
-        }
-
     }
 
     // TODO: check why this dont work
     private void chooseLevel(){
         Random random = new Random();
-        char mapType = 'X';
+
         int level = 9999;
         List<Character> map = null;
-        while(levelsDone.contains(mapType)) {
-             level = random.nextInt(boards.size());
+        while(player.getLevelsDone().contains(mapType)) {
+            level = random.nextInt(4);
             switch (level) {
                 case 0: {
                     mapType = 'A';
-                    map = boards.get(level);
+                    map = player.getBoards().get(level);
                     gameOver.setText("Collect all");
                     break;
                 }
                 case 1: {
                     mapType = 'P';
-                    map = boards.get(level);
+                    map = player.getBoards().get(level);
                     gameOver.setText("Collect plastic");
                     break;
                 }
                 case 2: {
                     mapType = 'G';
-                    map = boards.get(level);
+                    map = player.getBoards().get(level);
                     gameOver.setText("Collect glass");
                     break;
                 }
                 case 3: {
                     mapType = 'B';
-                    map = boards.get(level);
+                    map = player.getBoards().get(level);
                     gameOver.setText("Collect paper");
                     break;
                 }
             }
         }
-        gameBoard.setCurrentMap(mapType);
-        trashAmount = gameBoard.getTrashAmount(mapType, map);
+        player.getGameBoard().setCurrentMap(mapType);
+        trashAmount = player.getGameBoard().getTrashAmount(mapType, map);
 
-        levelsDone.add(mapType);
+        player.updateLevelsDone(mapType, level);
+        //player.getLevelsDone().add(mapType);
 
-        boards.remove(level);
-        System.out.println(boards.size());
+        //player.getBoards().remove(level);
+        //System.out.println(player.getBoards().size());
+
     }
 
     /**
@@ -232,7 +235,7 @@ public class GamePanel extends JPanel implements Runnable{
         //Painting board
         for (int h = 0; h < this.blocksNumberInDirection; h++){
             for (int w = 0; w < this.blocksNumberInDirection; w++){
-                char block = gameBoard.getBoard().get(h * this.blocksNumberInDirection + w);
+                char block = player.getGameBoard().getBoard().get(h * this.blocksNumberInDirection + w);
                 switch(block){
                     case 'W':
                         g.drawImage(resourceManager.getWall(), w * this.blockSize, h * this.blockSize,
