@@ -17,8 +17,6 @@ public class ResourceManager {
     BufferedImage heart;
     BufferedImage background;
 
-
-
     public ResourceManager(){
         this.classLoader = ResourceManager.class.getClassLoader();
         loadResources();

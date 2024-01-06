@@ -10,6 +10,7 @@ import java.awt.*;
 public class Player extends Character{
     private int score = 0;
     private int hearts = 3;
+    private int trashCollected = 0;
 
     public Player(GameBoard gb, MenuPanel mp, GamePanel gp) {
         super(20,20,2, gb, mp, gp);
@@ -59,17 +60,47 @@ public class Player extends Character{
     }
 
     private void checkCollisionWithTrash(int playerPositionIndex){
-        if(gameBoard.getBoard().get(playerPositionIndex) == 'G'){
-            gameBoard.getBoard().set(playerPositionIndex, 'N');
-            increaseScore();
+        char currentMap = gameBoard.getCurrentMap();
+        if(currentMap == 'A') {
+            if (gameBoard.getBoard().get(playerPositionIndex) == 'G'
+                    || gameBoard.getBoard().get(playerPositionIndex) == 'P'
+                    || gameBoard.getBoard().get(playerPositionIndex) == 'B') {
+                gameBoard.getBoard().set(playerPositionIndex, 'N');
+                increaseScore();
+                trashCollected += 1;
+            }
         }
-        if(gameBoard.getBoard().get(playerPositionIndex) == 'P'){
-            gameBoard.getBoard().set(playerPositionIndex, 'N');
-            increaseScore();;
+        if(currentMap == 'G') {
+            if (gameBoard.getBoard().get(playerPositionIndex) == 'G') {
+                gameBoard.getBoard().set(playerPositionIndex, 'N');
+                increaseScore();
+                trashCollected += 1;
+            }
+        } else if(gameBoard.getBoard().get(playerPositionIndex) == 'P'
+                || gameBoard.getBoard().get(playerPositionIndex) == 'B'){
+            decreaseScore();
         }
-        if(gameBoard.getBoard().get(playerPositionIndex) == 'B'){
-            gameBoard.getBoard().set(playerPositionIndex, 'N');
-            increaseScore();
+
+        if(currentMap == 'P') {
+            if (gameBoard.getBoard().get(playerPositionIndex) == 'P') {
+                gameBoard.getBoard().set(playerPositionIndex, 'N');
+                increaseScore();
+                trashCollected += 1;
+            }
+        } else if(gameBoard.getBoard().get(playerPositionIndex) == 'G'
+                || gameBoard.getBoard().get(playerPositionIndex) == 'B'){
+            decreaseScore();
+        }
+
+        if(currentMap == 'B') {
+            if (gameBoard.getBoard().get(playerPositionIndex) == 'B') {
+                gameBoard.getBoard().set(playerPositionIndex, 'N');
+                increaseScore();
+                trashCollected += 1;
+            }
+        } else if(gameBoard.getBoard().get(playerPositionIndex) == 'P'
+                || gameBoard.getBoard().get(playerPositionIndex) == 'G'){
+            decreaseScore();
         }
         menuPanel.getPointsLabel().setText("Points: " + getScore());
     }
@@ -94,5 +125,9 @@ public class Player extends Character{
     }
     public void decreaseHearts(){
         this.hearts -= 1;
+    }
+
+    public int getTrashCollected(){
+        return trashCollected;
     }
 }

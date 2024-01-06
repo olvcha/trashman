@@ -1,15 +1,7 @@
 package AB.gui;
 
-import AB.reading.ImagePanel;
-import AB.reading.ResourceManager;
-
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.geom.Rectangle2D;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 
 public class StartPanel extends JPanel {
     private JFrame frame;
@@ -57,7 +49,7 @@ public class StartPanel extends JPanel {
     private void addListener() {
         this.startButton.addActionListener(e -> {
             frame.dispose();
-            GameFrame gameFrame = new GameFrame();
+            new GameFrame();
         });
     }
 

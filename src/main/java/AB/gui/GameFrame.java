@@ -23,7 +23,7 @@ public class GameFrame extends JFrame{
         this.setLocationRelativeTo(null); //odpalanie na srodku
 
         menuPanel = new MenuPanel(this);
-        gamePanel = new GamePanel(500, 500, menuPanel);
+        gamePanel = new GamePanel(500, 500, menuPanel, this);
 
         setLayout(new FlowLayout(FlowLayout.LEFT, 0, 0));
         add(gamePanel);

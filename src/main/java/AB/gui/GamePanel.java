@@ -12,22 +12,29 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.geom.*;
 import java.io.IOException;
+import java.util.LinkedList;
+import java.util.Random;
+import java.util.List;
 
 public class GamePanel extends JPanel implements Runnable{
+    private GameFrame frame;
     private MenuPanel menuPanel;
     private Player player;
     private Enemy enemy;
     private GameBoard gameBoard;
     private ResourceManager resourceManager;
+    private List<List<Character>> boards;
     private int blockSize;
     private int width;
     private int height;
     private int blocksNumberInDirection;
+    private int trashAmount;
     private JLabel gameOver;
     final int FPS = 60;
     private KeyHandler keyHandler = new KeyHandler();
     private Thread gameThread;
     private Music music;
+    private List<Character> levelsDone;
 
     /**
      * GamePanel class constructor
@@ -35,7 +42,8 @@ public class GamePanel extends JPanel implements Runnable{
      * @param height height of the game panel
      * @param menuPanel menu panel
      */
-    public GamePanel(int width, int height, MenuPanel menuPanel){
+    public GamePanel(int width, int height, MenuPanel menuPanel, GameFrame frame){
+        this.frame = frame;
         this.menuPanel = menuPanel;
         this.width = width;
         this.height = height;
@@ -44,10 +52,13 @@ public class GamePanel extends JPanel implements Runnable{
         this.addKeyListener(keyHandler);
         this.setFocusable(true);
         this.gameBoard = new GameBoard();
+        this.boards = gameBoard.getBoards();
         this.player = new Player(gameBoard, menuPanel, this);
         this.enemy = new Enemy(gameBoard, menuPanel, this);
         this.resourceManager = new ResourceManager();
         this.gameOver = new JLabel("");
+        this.levelsDone = new LinkedList<>();
+        levelsDone.add('X');
         this.blockSize = width/this.blocksNumberInDirection; // width/25=20
         try {
             this.music = new Music();
@@ -87,18 +98,34 @@ public class GamePanel extends JPanel implements Runnable{
         double delta = 0;
         long lastTime = System.nanoTime();
         long currentTime;
+        chooseLevel();
 
         while(gameThread != null){
             currentTime = System.nanoTime();
             delta += (currentTime - lastTime)/drawInterval;
             lastTime = currentTime;
             if(delta >= 1){
+
                 update();
                 enemy.update();
                 repaint();
                 delta--;
             }
+//            if(trashAmount < player.getScore()){
+//                break;
+//            }
+            if(player.getTrashCollected() == trashAmount){
+                //chooseLevel();
+                trashAmount = 0;
+                this.frame.dispose();
+                SwingUtilities.invokeLater(GameFrame::new);
+            }
         }
+
+        if(boards.isEmpty()){
+            endGameThread();
+        }
+
     }
 
     /**
@@ -123,7 +150,7 @@ public class GamePanel extends JPanel implements Runnable{
     }
 
     /**
-     * Updating the map after player's move, checking collision with enemy
+     * Updating the map after player's move, checking collision with an enemy
      */
     public void update() {
         if (keyHandler.isUpPressed()) {
@@ -149,6 +176,50 @@ public class GamePanel extends JPanel implements Runnable{
 
     }
 
+    // TODO: check why this dont work
+    private void chooseLevel(){
+        Random random = new Random();
+        char mapType = 'X';
+        int level = 9999;
+        List<Character> map = null;
+        while(levelsDone.contains(mapType)) {
+             level = random.nextInt(boards.size());
+            switch (level) {
+                case 0: {
+                    mapType = 'A';
+                    map = boards.get(level);
+                    gameOver.setText("Collect all");
+                    break;
+                }
+                case 1: {
+                    mapType = 'P';
+                    map = boards.get(level);
+                    gameOver.setText("Collect plastic");
+                    break;
+                }
+                case 2: {
+                    mapType = 'G';
+                    map = boards.get(level);
+                    gameOver.setText("Collect glass");
+                    break;
+                }
+                case 3: {
+                    mapType = 'B';
+                    map = boards.get(level);
+                    gameOver.setText("Collect paper");
+                    break;
+                }
+            }
+        }
+        gameBoard.setCurrentMap(mapType);
+        trashAmount = gameBoard.getTrashAmount(mapType, map);
+
+        levelsDone.add(mapType);
+
+        boards.remove(level);
+        System.out.println(boards.size());
+    }
+
     /**
      * Painting the game board, including things such as walls, grass, characters etc.
      * @param g the <code>Graphics</code> object to protect
@@ -159,28 +230,28 @@ public class GamePanel extends JPanel implements Runnable{
         Graphics2D g2d = (Graphics2D) g;
 
         //Painting board
-        for (int height = 0; height < this.blocksNumberInDirection; height++){
-            for (int width = 0; width < this.blocksNumberInDirection; width++){
-                char block = gameBoard.getBoard().get(height * this.blocksNumberInDirection + width);
+        for (int h = 0; h < this.blocksNumberInDirection; h++){
+            for (int w = 0; w < this.blocksNumberInDirection; w++){
+                char block = gameBoard.getBoard().get(h * this.blocksNumberInDirection + w);
                 switch(block){
                     case 'W':
-                        g.drawImage(resourceManager.getWall(), width * this.blockSize, height * this.blockSize,
-                    this);
+                        g.drawImage(resourceManager.getWall(), w * this.blockSize, h * this.blockSize,
+                                this);
                         break;
                     case 'N':
-                        g.drawImage(resourceManager.getNothing(), width * this.blockSize, height * this.blockSize,
+                        g.drawImage(resourceManager.getNothing(), w * this.blockSize, h * this.blockSize,
                                 this);
                         break;
                     case 'G':
-                        g.drawImage(resourceManager.getGlass(), width * this.blockSize, height * this.blockSize,
+                        g.drawImage(resourceManager.getGlass(), w * this.blockSize, h * this.blockSize,
                                 this);
                         break;
                     case 'P':
-                        g.drawImage(resourceManager.getPlastic(), width * this.blockSize, height * this.blockSize,
+                        g.drawImage(resourceManager.getPlastic(), w * this.blockSize, h * this.blockSize,
                                 this);
                         break;
                     case 'B':
-                        g.drawImage(resourceManager.getPaper(), width * this.blockSize, height * this.blockSize,
+                        g.drawImage(resourceManager.getPaper(), w * this.blockSize, h * this.blockSize,
                                 this);
                         break;
                 }
