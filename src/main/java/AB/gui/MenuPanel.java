@@ -13,6 +13,7 @@ public class MenuPanel extends JPanel {
    private CardLayout cardLayout;
    private JPanel cardPanel;
     private JLabel levelLabel;
+    private JLabel timeLabel;
     @Getter
     private JLabel pointsLabel;
     @Getter
@@ -21,14 +22,19 @@ public class MenuPanel extends JPanel {
     private JButton exit;
     private JButton gameButton;
     private Player player;
-
+    private long startTime;
+    private long elapsedSeconds = 0;
+    private long secondsDisplay = 0;
+    private long elapsedMinutes = 0;
+    private long minutesDisplay = 0;
 
     /**
      * MenuPanel class constructor
      * @param frame game frame
      */
-    public MenuPanel(JFrame frame, Player player){
+    public MenuPanel(JFrame frame, Player player, long startTime){
         this.player = player;
+        this.startTime = startTime;
         this.frame = frame;
         this.cardLayout = new CardLayout();
         this.cardPanel = new JPanel(cardLayout);
@@ -50,7 +56,8 @@ public class MenuPanel extends JPanel {
     private void createMenuSection(){
         JPanel menuSection = new JPanel();
 
-        this.levelLabel = new JLabel("Level:                    ");
+        this.levelLabel = new JLabel("Time:                    ");
+        this.timeLabel = new JLabel("Time:                    ");
         this.pointsLabel = new JLabel("Points:                   ");
         this.menuButton = new JButton("Menu");
 
@@ -99,7 +106,7 @@ public class MenuPanel extends JPanel {
         newGame.addActionListener(e -> {
 
             this.frame.dispose();
-            new GameFrame(player);
+            new GameFrame(player, startTime);
         });
 
         exit.addActionListener(e -> {
@@ -137,7 +144,19 @@ public class MenuPanel extends JPanel {
         return new Dimension(500, 50);
     }
 
+    public void setTime(long time){
+        elapsedSeconds = time / 1000;
+        secondsDisplay = elapsedSeconds % 60;
+        elapsedMinutes = elapsedSeconds / 60;
+        minutesDisplay = elapsedMinutes % 60;
+        if(secondsDisplay < 10){
+            this.levelLabel.setText("Time: " + minutesDisplay + ":0" + secondsDisplay + "              ");
+        }
+        else{
+            this.levelLabel.setText("Time: " + minutesDisplay + ":" + secondsDisplay + "              ");
+        }
 
+    }
 
 
 

@@ -10,9 +10,7 @@ import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.geom.*;
 import java.io.IOException;
-import java.util.LinkedList;
 import java.util.Random;
 import java.util.List;
 
@@ -34,7 +32,8 @@ public class GamePanel extends JPanel implements Runnable{
     private Thread gameThread;
     private Music music;
     private char mapType = 'X';
-
+    private long startTime;
+    private long elapsedTime = 0;
 
     /**
      * GamePanel class constructor
@@ -42,16 +41,17 @@ public class GamePanel extends JPanel implements Runnable{
      * @param height height of the game panel
      * @param menuPanel menu panel
      */
-    public GamePanel(int width, int height, MenuPanel menuPanel, GameFrame frame, Player player){
+    public GamePanel(int width, int height, MenuPanel menuPanel, GameFrame frame, Player player, long startTime){
         this.frame = frame;
-        this.menuPanel = menuPanel;
         this.width = width;
         this.height = height;
         this.blocksNumberInDirection = 25;
         this.setPreferredSize(new Dimension(width, height));
         this.addKeyListener(keyHandler);
         this.setFocusable(true);
+        this.menuPanel = menuPanel;
 
+        this.startTime = startTime;
         this.player = player;
         player.setCurrentGame(menuPanel, this);
 
@@ -106,29 +106,29 @@ public class GamePanel extends JPanel implements Runnable{
             delta += (currentTime - lastTime)/drawInterval;
             lastTime = currentTime;
             if(delta >= 1){
-
                 update();
                 enemy.update();
                 repaint();
                 delta--;
+
+                elapsedTime = System.currentTimeMillis() - startTime;
+                menuPanel.setTime(elapsedTime);
             }
 
             if(player.getTrashCollected() == trashAmount){
                 if(player.getLevelsDone().size() == 5){
                     System.out.println("You saved Korok Forest Yahahaha!");
+                    new EndFrame(elapsedTime, player.getScore());
                     endGameThread();
                 }
                 System.out.println(this.mapType + " level done");
                 trashAmount = 0;
                 this.frame.dispose();
                 keyHandler = null;
-                new GameFrame(player);
+                new GameFrame(player, startTime);
                 endGameThread();
             }
         }
-
-
-
     }
 
     /**
@@ -177,7 +177,6 @@ public class GamePanel extends JPanel implements Runnable{
         }
     }
 
-    // TODO: check why this dont work
     private void chooseLevel(){
         Random random = new Random();
 
@@ -216,11 +215,6 @@ public class GamePanel extends JPanel implements Runnable{
         trashAmount = player.getGameBoard().getTrashAmount(mapType, map);
 
         player.updateLevelsDone(mapType, level);
-        //player.getLevelsDone().add(mapType);
-
-        //player.getBoards().remove(level);
-        //System.out.println(player.getBoards().size());
-
     }
 
     /**

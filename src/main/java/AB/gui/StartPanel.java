@@ -10,6 +10,7 @@ public class StartPanel extends JPanel {
     private JButton startButton;
     private JLabel mainTitleLabel;
     private Player player;
+    private long startTime;
 
     /**
      * StartPanel class constructor
@@ -53,7 +54,8 @@ public class StartPanel extends JPanel {
         this.startButton.addActionListener(e -> {
             frame.dispose();
             this.player = new Player();
-            new GameFrame(player);
+            startTime = System.currentTimeMillis();
+            new GameFrame(player, startTime);
         });
     }
 

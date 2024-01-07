@@ -103,9 +103,11 @@ public class Player extends Character{
                 increaseScore();
                 trashCollected += 1;
             }
-        } else if(gameBoard.getBoard().get(playerPositionIndex) == 'P'
-                || gameBoard.getBoard().get(playerPositionIndex) == 'B'){
-            decreaseScore();
+            else if(gameBoard.getBoard().get(playerPositionIndex) == 'P'
+                    || gameBoard.getBoard().get(playerPositionIndex) == 'B'){
+                decreaseScore();
+                gameBoard.getBoard().set(playerPositionIndex, 'N');
+            }
         }
 
         if(currentMap == 'P') {
@@ -114,9 +116,11 @@ public class Player extends Character{
                 increaseScore();
                 trashCollected += 1;
             }
-        } else if(gameBoard.getBoard().get(playerPositionIndex) == 'G'
-                || gameBoard.getBoard().get(playerPositionIndex) == 'B'){
-            decreaseScore();
+            else if(gameBoard.getBoard().get(playerPositionIndex) == 'G'
+                    || gameBoard.getBoard().get(playerPositionIndex) == 'B'){
+                decreaseScore();
+                gameBoard.getBoard().set(playerPositionIndex, 'N');
+            }
         }
 
         if(currentMap == 'B') {
@@ -125,13 +129,14 @@ public class Player extends Character{
                 increaseScore();
                 trashCollected += 1;
             }
-        } else if(gameBoard.getBoard().get(playerPositionIndex) == 'P'
-                || gameBoard.getBoard().get(playerPositionIndex) == 'G'){
-            decreaseScore();
+            else if(gameBoard.getBoard().get(playerPositionIndex) == 'P'
+                    || gameBoard.getBoard().get(playerPositionIndex) == 'G'){
+                decreaseScore();
+                gameBoard.getBoard().set(playerPositionIndex, 'N');
+            }
         }
         menuPanel.getPointsLabel().setText("Points: " + getScore());
     }
-
 
     public void setScore(int score) {
         this.score = score;
@@ -148,7 +153,7 @@ public class Player extends Character{
         this.score += 1;
     }
     public void decreaseScore(){
-        this.score -= 1;
+        this.score -= 2;
     }
     public void decreaseHearts(){
         this.hearts -= 1;
