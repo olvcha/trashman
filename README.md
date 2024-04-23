@@ -3,6 +3,10 @@
 ### About the project:
 Super Korok: Trash-Man game is a game inspired by Pac-Man. It is a serious game that draws attention to the pollution of forests with garbage. 
 
+<p align="center">
+  <img src="demo.png">
+</p>
+
 ### Lore and additional information:
 
 A long, long time ago, there was a man named Ganondorf. He was a chief of a desert village. Nowadays, sadly, he lost his mind and started to litter all over the Hyrule with Bokogoblins’ help. After about a week, almost whole Hyrule was clean again because of a help of every citizen. 
