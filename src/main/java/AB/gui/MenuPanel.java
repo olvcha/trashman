@@ -1,6 +1,7 @@
 package AB.gui;
 
 import AB.GameElements.Player;
+import AB.GameElements.Player2;
 import lombok.Getter;
 
 import javax.swing.*;
@@ -21,7 +22,7 @@ public class MenuPanel extends JPanel {
     private JButton newGame;
     private JButton exit;
     private JButton gameButton;
-    private Player player;
+    private Player2 player;
     private long startTime;
     private long elapsedSeconds = 0;
     private long secondsDisplay = 0;
@@ -32,7 +33,7 @@ public class MenuPanel extends JPanel {
      * MenuPanel class constructor
      * @param frame game frame
      */
-    public MenuPanel(JFrame frame, Player player, long startTime){
+    public MenuPanel(JFrame frame, Player2 player, long startTime){
         this.player = player;
         this.startTime = startTime;
         this.frame = frame;

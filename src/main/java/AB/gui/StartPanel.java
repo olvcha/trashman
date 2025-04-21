@@ -1,6 +1,7 @@
 package AB.gui;
 
 import AB.GameElements.Player;
+import AB.GameElements.Player2;
 
 import javax.swing.*;
 import java.awt.*;
@@ -9,7 +10,7 @@ public class StartPanel extends JPanel {
     private JFrame frame;
     private JButton startButton;
     private JLabel mainTitleLabel;
-    private Player player;
+    private Player2 player;
     private long startTime;
 
     /**
@@ -53,7 +54,7 @@ public class StartPanel extends JPanel {
     private void addListener() {
         this.startButton.addActionListener(e -> {
             frame.dispose();
-            this.player = new Player();
+            this.player = new Player2(20,20,2);
             startTime = System.currentTimeMillis();
             new GameFrame(player, startTime);
         });

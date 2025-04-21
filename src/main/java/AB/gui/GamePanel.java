@@ -1,7 +1,9 @@
 package AB.gui;
 
 import AB.GameElements.Enemy;
+import AB.GameElements.Enemy2;
 import AB.GameElements.Player;
+import AB.GameElements.Player2;
 import AB.Mechanics.KeyHandler;
 import AB.reading.Music;
 import AB.reading.ResourceManager;
@@ -17,8 +19,10 @@ import java.util.List;
 public class GamePanel extends JPanel implements Runnable{
     private GameFrame frame;
     private MenuPanel menuPanel;
-    private Player player;
-    private Enemy enemy;
+    //private Player player;
+    private Player2 player;
+    //private Enemy enemy;
+    private Enemy2 enemy;
 
     private ResourceManager resourceManager;
     private int blockSize;
@@ -41,7 +45,7 @@ public class GamePanel extends JPanel implements Runnable{
      * @param height height of the game panel
      * @param menuPanel menu panel
      */
-    public GamePanel(int width, int height, MenuPanel menuPanel, GameFrame frame, Player player, long startTime){
+    public GamePanel(int width, int height, MenuPanel menuPanel, GameFrame frame, Player2 player, long startTime){
         this.frame = frame;
         this.width = width;
         this.height = height;
@@ -56,7 +60,8 @@ public class GamePanel extends JPanel implements Runnable{
         player.setCurrentGame(menuPanel, this);
 
         //this.player = new Player(menuPanel, this);
-        this.enemy = new Enemy(player.getGameBoard(), menuPanel, this);
+        this.enemy = new Enemy2(player.getGameBoard(), menuPanel, this, 300,300,1);
+        //this.enemy = new Enemy(player.getGameBoard(), menuPanel, this);
         this.resourceManager = new ResourceManager();
         this.gameOver = new JLabel("");
 

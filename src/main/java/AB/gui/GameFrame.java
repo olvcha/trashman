@@ -4,19 +4,20 @@ import javax.swing.*;
 import java.awt.*;
 
 import AB.GameElements.Player;
+import AB.GameElements.Player2;
 import com.formdev.flatlaf.FlatDarculaLaf;
 
 public class GameFrame extends JFrame{
 
     private GamePanel gamePanel;
     private MenuPanel menuPanel;
-    private Player player;
+    private Player2 player;
     private long currentTime;
 
     /**
      * GameFrame class constructor
      */
-    public GameFrame(Player player, long currentTime) {
+    public GameFrame(Player2 player, long currentTime) {
         super("SuperKorok");
         this.player = player;
         this.currentTime = currentTime;
