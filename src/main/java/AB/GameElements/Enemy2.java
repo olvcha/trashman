@@ -24,6 +24,8 @@ public class Enemy2 implements Character2 {
         this.gameBoard = gameBoard;
         this.menuPanel = menuPanel;
         this.gamePanel = gamePanel;
+        Character2.whoAreYou();
+        makeSound();
     }
 
     @Override

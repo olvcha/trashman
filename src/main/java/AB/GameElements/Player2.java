@@ -33,6 +33,8 @@ public class Player2 implements Character2 {
         this.levelsDone = new LinkedList<>();
         levelsDone.add('X');
         gameBoard = new GameBoard();
+        Character2.whoAreYou();
+        makeSound();
     }
     @Override
     public void makeSound() {
